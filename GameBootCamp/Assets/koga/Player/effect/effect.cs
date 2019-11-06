@@ -17,7 +17,7 @@ public class effect : MonoBehaviour
         
     }
 
-    public void HitEffect(Vector2 effect)
+    public void HitEffect()
     {
         animator.SetTrigger("HitObject");
     }

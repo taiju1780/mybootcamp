@@ -43,7 +43,13 @@ public class Move : MonoBehaviour
 
     //エフェクト
     [SerializeField] private GameObject hitEffect;
+    [SerializeField] private GameObject hitEffectpos;
+    [SerializeField] private GameObject rotaEffect;
     private effect _effect;
+    private effectpos _effectpos;
+
+
+    [SerializeField] GameObject ringparticle;
 
     //ステートパターン
     public enum State
@@ -58,6 +64,8 @@ public class Move : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        _effect = hitEffect.GetComponent<effect>();
+        _effectpos = hitEffectpos.GetComponent<effectpos>();
         rotaspeed = 0;
         speed = 4;
         gravity = 3;
@@ -82,14 +90,17 @@ public class Move : MonoBehaviour
             {
                 rotaright = true;
             }
+
             if (rotaHorizontal <= -sticRange)
             {
                 rotaleft = true;
             }
+
             if (rotaVertical >= sticRange)
             {
                 rotadown = true;
             }
+
             if (rotaVertical <= -sticRange)
             {
                 rotaup = true;
@@ -99,6 +110,15 @@ public class Move : MonoBehaviour
 
             //回転
             transform.Rotate(new Vector3(0, rotaspeed * rotanum, 0));
+
+            if(rotaspeed > 1)
+            {
+                rotaEffect.SetActive(true);
+            }
+            else
+            {
+                rotaEffect.SetActive(false);
+            }
 
             //移動
             if (rotaspeed <= rotalimit)
@@ -168,7 +188,7 @@ public class Move : MonoBehaviour
         dieflag = true;
     }
 
-    public void CollisionObstract(Vector2 push)
+    public void CollisionObstract(Vector2 push, Vector2 effect)
     {
         if (invincible)
         {
@@ -178,6 +198,8 @@ public class Move : MonoBehaviour
         {
             speed = 0;
             bound = push;
+            _effectpos.HiteffectPos(effect);
+            _effect.HitEffect();
         }
     }
 
@@ -185,13 +207,14 @@ public class Move : MonoBehaviour
     {
         speed = 0;
         bound = push;
-        _effect = hitEffect.GetComponent<effect>();
-        _effect.HitEffect(effect);
+        _effectpos.HiteffectPos(effect);
+        _effect.HitEffect();
     }
     
     public void CollisionRing()
     {
         itemspeed = 20;
+        Instantiate(ringparticle, transform.position, transform.rotation);
     }
     
     public void CollisionBigBamb()

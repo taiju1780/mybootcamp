@@ -35,7 +35,8 @@ public class Hitpoint : MonoBehaviour
                 Vector2 playerpos = new Vector2(player.transform.position.x, player.transform.position.y);
                 Vector2 ray = colpos - playerpos;
                 pushvec = -ray.normalized * boundObs;
-                move.CollisionObstract(pushvec);
+                effectvec = ray.normalized * 0.3f;
+                move.CollisionObstract(pushvec, effectvec);
             }
             if (col.gameObject.tag == "Chaser")
             {
@@ -48,7 +49,7 @@ public class Hitpoint : MonoBehaviour
                 Vector2 playerpos = new Vector2(player.transform.position.x, player.transform.position.y);
                 Vector2 ray = colpos - playerpos;
                 pushvec = -ray.normalized * boundWall;
-                effectvec = ray.normalized * 2;
+                effectvec = ray.normalized * 0.3f;
                 move.CollisionWall(pushvec, effectvec);
             }
         }
